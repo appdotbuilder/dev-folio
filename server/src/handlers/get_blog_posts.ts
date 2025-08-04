@@ -1,8 +1,19 @@
 
+import { db } from '../db';
+import { blogPostsTable } from '../db/schema';
 import { type BlogPost } from '../schema';
+import { desc } from 'drizzle-orm';
 
 export const getBlogPosts = async (): Promise<BlogPost[]> => {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is fetching all blog posts from the database, ordered by creation date (newest first).
-    return [];
+  try {
+    const results = await db.select()
+      .from(blogPostsTable)
+      .orderBy(desc(blogPostsTable.created_at))
+      .execute();
+
+    return results;
+  } catch (error) {
+    console.error('Failed to fetch blog posts:', error);
+    throw error;
+  }
 };
